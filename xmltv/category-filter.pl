@@ -203,7 +203,8 @@ foreach my $program(@program) {
   foreach my $episodenum(@episodenum) {
     if ($episodenum->getAttribute("system") eq "common") {
       $se=$episodenum->getFirstChild()->getData();
-    } elsif ($episodenum->getAttribute("system") eq "dd_progid") {
+    } elsif (($episodenum->getAttribute("system") eq "dd_progid") 
+         && (!defined $se)) {
 
       my $dd_prog_id=$episodenum->getFirstChild()->getData();
       if ( $dd_prog_id =~ /^(..\d{8}).(\d{4})/ ) {
@@ -212,7 +213,6 @@ foreach my $program(@program) {
         my $dd_s=$1;
         if (int($dd_e) > 0) {
           $se = sprintf("E%03d", int($dd_e));
-          print STDERR "Season/Episode=$se\n";
         }
       }
     }
