@@ -1,0 +1,22 @@
+start=0
+days=14
+# num cache days from end
+ncdays=0
+# num cache days from start
+ncsdays=2
+#ncsdays=0
+retries=2
+user=<email>
+pass=<password in the clear>
+cache=/home/<user>/xmltv/cache
+#icon=/home/<user>/xmltv/icons
+lang=en
+outfile=/home/<user>/xmltv/xmltv_default.xml
+#trailer=/home/<user>/xmltv/trailers
+#proxy=http://localhost:8080
+#outformat=xmltv (or 'xtvd')
+#lineuptype=type (xtvd only - Cable/CableDigital/Satellite/LocalBroadcast)
+#lineupname=name (xtvd only)
+#lineuplocation=location (xtvd only)
+#lineupid=X:80000
+#postalcode=01010 
