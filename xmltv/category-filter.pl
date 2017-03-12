@@ -5,7 +5,24 @@ use Data::Dumper;
 use XML::DOM;
 
 
-	
+# KODI COLOR MAPPINGS
+# 0 Other/Unknown Grey
+# 16 Movie Orange
+# 32 News Light Green
+# 48 TV Show Yellow
+# 64 Sports Red
+# 80 Child Cyan
+# 96 Music Green
+# 112 Arts Blue
+# 128 Social Light Grey
+# 144 Science Purple
+# 160 Hobby Light Purple
+# 176 Special Light Blue
+# 192 Other/Unknown Grey
+# 208 Other/Unknown Grey
+# 224 Other/Unknown Grey
+# 240 Other/Unknown Grey
+
 #
 # The categories recognized by tvheadend (see epg.c) 
 #  
@@ -41,12 +58,14 @@ my $SPORT_TEAM        =    "Team sports (excluding football)";
 my $ATHLETICS         =    "Athletics";
 my $SPORT_MOTOR       =    "Motor sport";
 my $SPORT_WATER       =    "Water sport";
+my $SPORT_HORSES      =    "Equestrian";
+my $MARTIAL_ARTS      =    "Martial sports";
 
-my $KIDS              =    "Children's / Youth programmes";
-my $KIDS_0_5          =    "Pre-school children's programmes";
-my $KIDS_6_14         =    "Entertainment programmes for 6 to 14";
-my $KIDS_10_16        =    "Entertainment programmes for 10 to 16";
-my $EDUCATIONAL       =    "Informational / Educational / School programmes";
+my $KIDS              =    "Children's / Youth programs";
+my $KIDS_0_5          =    "Pre-school children's programs";
+my $KIDS_6_14         =    "Entertainment programs for 6 to 14";
+my $KIDS_10_16        =    "Entertainment programs for 10 to 16";
+my $EDUCATIONAL       =    "Informational / Educational / School programs";
 my $CARTOON           =    "Cartoons / Puppets";
 
 my $MUSIC             =    "Music / Ballet / Dance";
@@ -55,6 +74,7 @@ my $CLASSICAL         =    "Serious music / Classical music";
 my $FOLK              =    "Folk / Traditional music";
 my $JAZZ              =    "Jazz";
 my $OPERA             =    "Musical / Opera";
+my $BALLET            =    "Ballet";
 
 my $CULTURE           =    "Arts / Culture (without music)";
 my $PERFORMING        =    "Performing arts";
@@ -65,6 +85,9 @@ my $LITERATURE        =    "Literature";
 my $FILM              =    "Film / Cinema";
 my $EXPERIMENTAL_FILM =    "Experimental film / Video";
 my $BROADCASTING      =    "Broadcasting / Press";
+my $NEWMEDIA          =    "New media";
+my $ARTS_MAGAZINE     =    "Arts magazines / Culture magazines";
+my $FASHION           =    "Fashion";
 
 my $SOCIAL            =    "Social / Political issues / Economics";
 my $MAGAZINE          =    "Magazines / Reports / Documentary";
@@ -80,7 +103,7 @@ my $FOREIGN           =    "Foreign countries / Expeditions";
 my $SPIRITUAL         =    "Social / Spiritual sciences";
 my $FURTHER_EDUCATION =    "Further education";
 my $LANGUAGES         =    "Languages";
-my $NOCLASS           =    "Unpublished";
+
 my $HOBBIES           =    "Leisure hobbies";
 my $TRAVEL            =    "Tourism / Travel";
 my $HANDICRAF         =    "Handicraft";
@@ -103,7 +126,7 @@ my %REPLACE=(
     "en:Baseball"              => $SPORT_TEAM ,
     "en:Basketball"            => $SPORT_TEAM ,
     "en:Busfinancial"          => $NEWS_MAGAZINE ,
-#    "en:Children"              => $KIDS ,
+    "en:Children"              => $KIDS ,
     "en:Crime"                 => $THRILLER ,
     "en:Crimedrama"            => $THRILLER ,
     "en:Drama"                 => $MOVIE,
@@ -136,7 +159,7 @@ my %REPLACE=(
     "en:Religious"             => $RELIGION ,
     "en:Science"               => $SCIENCE ,
     "en:Sciencefiction"        => $SF ,
-#    "en:Selfimprovement"       => 0 ,
+    "en:Selfimprovement"       => $INTERVIEW ,
 #    "en:Series"                => 0 ,
 #    "en:Shooting"              => 0 ,
     "en:Sitcom"                => $COMEDY ,
