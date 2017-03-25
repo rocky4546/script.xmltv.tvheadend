@@ -27,8 +27,8 @@ done
 if [[ ! -r "xmltv/$perl_file" ]] ; then
   if [[ ! -r "$perl_file" ]] ; then
     echo "$perl_file not found"
-    echo "Please download file from"
-    echo "http://zap2xml.awardspace.info"
+    echo "Please download file from http://zap2xml.awardspace.info"
+    echo "and place into the folder containing install.sh"
     echo
     isAllFound=false
   else
@@ -75,7 +75,17 @@ fi
 
 echo
 echo "### Installing $grab_file"
-if [ ! -x /$grab_file ] ; then
+isRedeploy=true
+if [ -x /$grab_file ] ; then
+  echo "WARNING: Found /$grab_file already present"
+  read -p "Replace /$grab_file? [N]" answer
+  if [[ ! "$answer" =~ [Y|y] ]] ; then
+    echo "Not updating /$grab_file"
+    isRedeploy=false
+  fi
+fi
+if [[ "$isRedeploy" == "true" ]] ; then
+
   echo "Copying $grab_file to /usr/bin"
   sudo cp $grab_file /usr/bin
   sudo chmod 755 /$grab_file
@@ -98,7 +108,7 @@ if [ ! -x /$grab_file ] ; then
     exit
   fi
 else
-  echo "/$grab_file already exists, skipping"
+  echo "/$grab_file not deployed, skipping"
 fi
 
 echo
