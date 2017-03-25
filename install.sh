@@ -161,7 +161,9 @@ echo "### Deploying scripts to $dest_folder"
 if [[ ! -d $dest_folder ]] ; then
   mkdir $dest_folder
 fi 
+chmod 755 $cat_file $script_file $perl_file 
 cp $cat_file $script_file $perl_file ${dest_folder}/
+
 
 echo
 echo "### Adding a cronjob to run daily"
