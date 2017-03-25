@@ -19,7 +19,7 @@ for file in "$grab_file" "x$rc_file" "$cat_file" "$script_file" ; do
   if [[ ! -r "$file" ]] ; then
     echo "$file not found"
     echo "Please download and extract the files from"
-    echo "https://github.com/rocky4546/script.xmltv.tvheadend/tree/master/repo"
+    echo "https://github.com/rocky4546/script.xmltv.tvheadend/releases"
     echo
     isAllFound=false
   fi
