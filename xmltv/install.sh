@@ -157,7 +157,7 @@ echo "Find $grab_file and make sure the round circle to the left is checked"
 echo "No other row should be checked"
 echo "Go to Configuration -> Channel / EPG -> EPG Grabber
 echo "Set the Cron multiline to include"
-echo "0 8 * * *"
+echo "0 8 \* \* \*"
 echo "This will pull in the updated xmltv.xml file at 8am every day"
 echo "Save the changes"
 echo
