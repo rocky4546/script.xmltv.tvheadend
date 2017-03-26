@@ -70,8 +70,18 @@ if [ ! -L $htshome/.xmltv ] ; then
   sudo ln -s $dest_folder $htshome/.xmltv
   sudo chown -h $htsuser:$htsuser $htshome/.xmltv
   if [ ! -L $htshome/.xmltv ] ; then
-    echo "Unable to create softlink $htshome/.xmltv.  Is there a file/folder already there?"
-    echo "If so, try removing the file/folder and running the install script again"
+    echo "ERROR: Unable to create softlink $htshome/.xmltv.  Is there a file/folder already there?"
+    read -p "Trying to remove $htshome/.xmltv and try again [y|Y] ? " response
+    if [[ ! "$answer" =~ [Y|y] ]] ; then
+      echo "Removing file/folder and trying again"
+      sudo rm -rf $htshome/.xmltv
+      sudo ln -s $dest_folder $htshome/.xmltv
+      sudo chown -h $htsuser:$htsuser $htshome/.xmltv
+      if [ ! -L $htshome/.xmltv ] ; then
+        echo "ERROR: Unable to create softlink $htshome/.xmltv."
+        exit
+      else
+        echo "Softlink was successfully created"
     exit
   fi
 else
@@ -103,17 +113,17 @@ if [[ "$isRedeploy" == "true" ]] ; then
   echo "Restarting tvheadend to list the new grabber file"
   sudo service tvheadend restart
   sleep 3
-  echo "Checking to see if TVHeadend knows about the new file"
-  present=`sudo grep $grab_file ~hts/.hts/tvheadend/epggrab/config`
-  if [[ -z "$present" ]] ; then
-    echo "ERROR: TVHeadend has not recognized the new $grab_file"
-    echo "try rebooting and logging into the TVHeadend website"
-    echo "Once the $grab_file appears in the EPG Grabber Modules list"
-    echo "Rerun this installation script"
-    exit
-  fi
 else
   echo "/$grab_file not deployed, skipping"
+fi
+echo "Checking to see if TVHeadend knows about the grabber file"
+present=`sudo grep $grab_file ~hts/.hts/tvheadend/epggrab/config`
+if [[ -z "$present" ]] ; then
+  echo "ERROR: TVHeadend has not recognized the new $grab_file"
+  echo "try rebooting and logging into the TVHeadend website"
+  echo "Once the $grab_file appears in the EPG Grabber Modules list"
+  echo "Rerun this installation script"
+  exit
 fi
 
 echo
