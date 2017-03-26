@@ -31,6 +31,11 @@ if [[ ! -r "xmltv/$perl_file" ]] ; then
     echo "and place into the folder containing install.sh"
     echo
     isAllFound=false
+  elif [[ ! -d "xmltv" ]] ; then
+    echo "ERROR: Unable to find xmltv folder in the release install folder"
+    echo "It looks like this is not a released version from"
+    echo "https://github.com/rocky4546/script.xmltv.tvheadend/releases"
+    isAllFound=false
   else
     cp $perl_file xmltv/$perl_file
   fi
@@ -67,27 +72,9 @@ if [ ! -d $htshome ] ; then
 fi
 if [ ! -L $htshome/.xmltv ] ; then
   echo "Softlink not found, Adding softlink"
+  sudo rm -rf  $htshome/.xmltv
   sudo ln -s $dest_folder $htshome/.xmltv
   sudo chown -h $htsuser:$htsuser $htshome/.xmltv
-  if [ ! -L $htshome/.xmltv ] ; then
-    echo "ERROR: Unable to create softlink $htshome/.xmltv.  Is there a file/folder already there?"
-    read -p "Try to remove $htshome/.xmltv [y|Y] ? " response
-    if [[ ! "$answer" =~ [Y|y] ]] ; then
-      echo "Removing file/folder and trying again"
-      sudo rm -rf $htshome/.xmltv
-      sudo ln -s $dest_folder $htshome/.xmltv
-      sudo chown -h $htsuser:$htsuser $htshome/.xmltv
-      if [ ! -L $htshome/.xmltv ] ; then
-        echo "ERROR: Unable to create softlink $htshome/.xmltv"
-        exit
-      else
-        echo "Softlink was successfully created"
-      fi
-    else
-      echo "Aborting install until file/folder blocking softlink is resolved"
-      exit
-    fi
-  fi
 else
   echo "Softlink $htshome/.xmltv already exists, skipping"
 fi
