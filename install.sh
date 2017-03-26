@@ -71,18 +71,22 @@ if [ ! -L $htshome/.xmltv ] ; then
   sudo chown -h $htsuser:$htsuser $htshome/.xmltv
   if [ ! -L $htshome/.xmltv ] ; then
     echo "ERROR: Unable to create softlink $htshome/.xmltv.  Is there a file/folder already there?"
-    read -p "Trying to remove $htshome/.xmltv and try again [y|Y] ? " response
+    read -p "Try to remove $htshome/.xmltv [y|Y] ? " response
     if [[ ! "$answer" =~ [Y|y] ]] ; then
       echo "Removing file/folder and trying again"
       sudo rm -rf $htshome/.xmltv
       sudo ln -s $dest_folder $htshome/.xmltv
       sudo chown -h $htsuser:$htsuser $htshome/.xmltv
       if [ ! -L $htshome/.xmltv ] ; then
-        echo "ERROR: Unable to create softlink $htshome/.xmltv."
+        echo "ERROR: Unable to create softlink $htshome/.xmltv"
         exit
       else
         echo "Softlink was successfully created"
-    exit
+      fi
+    else
+      echo "Aborting install until file/folder blocking softlink is resolved"
+      exit
+    fi
   fi
 else
   echo "Softlink $htshome/.xmltv already exists, skipping"
@@ -201,7 +205,7 @@ echo "No other row should be checked"
 echo "Go to Configuration -> Channel / EPG -> EPG Grabber
 echo "Set the Cron multiline to include"
 echo "0 $pulltime \* \* \*"
-echo "This will pull in the updated xmltv.xml file at 8am every day"
+echo "This will pull in the updated xmltv.xml file at ${pulltime}am every day"
 echo "Save the changes"
 echo
 echo "Additional information can be found on the Wiki:
