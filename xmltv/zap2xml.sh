@@ -3,6 +3,13 @@ path=`dirname $0`
 logfile="${path}/../.kodi/temp/zap2xml.log"
 tempTvXmlFile="xmltv_default.xml"
 
+logpath=`dirname $logfile`
+if [[ ! -d $logpath ]] ; then
+  # kodi may not be installed.  use folder where
+  # script is located
+  logfile=$path/`basename $logfile`
+fi
+
 rm -f $logfile
 # create the default xmltv.xml
 ${path}/zap2xml.pl -D -S 3  > ${logfile} 2>&1
