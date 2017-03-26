@@ -69,6 +69,11 @@ if [ ! -L $htshome/.xmltv ] ; then
   echo "Softlink not found, Adding softlink"
   sudo ln -s $dest_folder $htshome/.xmltv
   sudo chown -h $htsuser:$htsuser $htshome/.xmltv
+  if [ ! -L $htshome/.xmltv ] ; then
+    echo "Unable to create softlink $htshome/.xmltv.  Is there a file/folder already there?"
+    echo "If so, try removing the file/folder and running the install script again"
+    exit
+  fi
 else
   echo "Softlink $htshome/.xmltv already exists, skipping"
 fi
