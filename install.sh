@@ -9,7 +9,8 @@ perl_file="zap2xml.pl"
 dest_folder=~/xmltv
 htsuser="hts"
 
-#
+cd `dirname $0`
+
 # Determine if all files are present
 echo
 echo "### Checking for files to install"
