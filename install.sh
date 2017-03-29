@@ -9,6 +9,7 @@ perl_file="zap2xml.pl"
 dest_folder=~/xmltv
 htsuser="hts"
 
+runfrom=`pwd`
 cd `dirname $0`
 
 # Determine if all files are present
@@ -33,14 +34,14 @@ if [[ ! -r "xmltv/$perl_file" ]] ; then
     isFound=false
     while [ $isFound == "false" ] ; do
       read -p "Enter the folder to $perl_file: " newpath
-      eval newloc=$newpath/$perl_file
+      eval newloc=$runfrom/$newpath/$perl_file
       if [[ -z $newpath ]] ; then
         echo "Aborting install..."
         exit
       elif [[ -r "${newloc}" ]] ; then
         echo "Found file, thank you at $newloc"
         echo
-        cp $newloc `dirname $0`
+        cp $newloc .
         isFound=true
       else
         echo "Hmmm, unable to find the file at $newloc"
@@ -100,7 +101,7 @@ echo "### Installing $grab_file"
 isRedeploy=true
 if [ -x /$grab_file ] ; then
   echo "WARNING: Found /$grab_file already present"
-  read -p "Replace /$grab_file? [N]" answer
+  read -p "Replace /$grab_file? [N|y]" answer
   if [[ ! "$answer" =~ [Y|y] ]] ; then
     echo "Not updating /$grab_file"
     isRedeploy=false
@@ -131,6 +132,8 @@ if [[ -z "$present" ]] ; then
   echo "Once the $grab_file appears in the EPG Grabber Modules list"
   echo "Rerun this installation script"
   exit
+else
+  echo "Found, TVHeadend has grabber file listed"
 fi
 
 echo
@@ -139,7 +142,7 @@ echo "### Deploying $rc_file file"
 isRedeploy=true
 if [[ -f ~/$rc_file ]] ; then
   echo "WARNING: Found ~/$rc_file already present"
-  read -p "Replace $rc_file? [N]" answer
+  read -p "Replace $rc_file? [N|y]" answer
   if [[ ! "$answer" =~ [Y|y] ]] ; then
     echo "Not updating $rc_file"
     isRedeploy=false
@@ -189,9 +192,11 @@ cp $cat_file $script_file $perl_file ${dest_folder}/
 
 echo
 echo "### Adding a cronjob to run daily"
-read -p "What hour do you want the cronjob to run? (Recommend between 0 and 7) " hour
+read -p "What hour do you want the cronjob to run? [1] (Recommend between 0 and 7) " hour
+hour=${hour:-1}
 # random generate the minute between 5 and 55
 minute=$(((RANDOM % 55)+5))
+echo "cronjob will run script at $hour:$(printf %02d $minute) every day"
 pulltime=$(($hour+3))
 (crontab -l 2>/dev/null | grep -v $script_file; echo "$minute $hour * * * /home/$USER/$script_file >/dev/null 2>&1") | crontab -
 echo "Cronjob added to crontab"
@@ -199,14 +204,14 @@ echo "Cronjob added to crontab"
 echo
 echo "###### Installation Completed Successfully ######"
 echo 
-read -p "Do you want to quickly create a 2 day EPG? [Y|y] " answer
-if [[ -z $answer || "$answer" =~ [Y|y] ]] ; then
+read -p "Do you want to quickly create a 2 day EPG? [Y|n] " answer
+if [[ -z "$answer" || "$answer" =~ [Y|y] ]] ; then
   echo "Running script from ${dest_folder}/"
   echo "Once the xmltv.xml file is generated, it can be imported into"
   echo "TVHeadend. If it does not appear, check the log"
   echo "at ~/kodi/temp/zap2xml.log or ${dest_folder}/"
   echo 
-  /home/mccaslin/xmltv/zap2xml.sh fast -d 2
+  /home/$USER/$script_file fast -d 2
   echo "zap2xml.sh script finished"
 else
   echo "Generation of xmltv.xml skipped"
@@ -218,7 +223,7 @@ echo "Log into the TVHeadend website"
 echo "Configuration -> Channel / EPG -> EPG Grabber"
 echo "Find $grab_file and make sure the round circle to the left is checked"
 echo "No other row should be checked"
-echo "Go to Configuration -> Channel / EPG -> EPG Grabber
+echo "Go to Configuration -> Channel / EPG -> EPG Grabber"
 echo "Set the Cron multiline to include"
 echo "0 $pulltime \* \* \*"
 echo "This will pull in the updated xmltv.xml file at ${pulltime}am every day"
@@ -229,6 +234,6 @@ echo
 echo "Clicking on Re-run Internal EPG Grabbers will manual import"
 echo "the xmltv.xml file"
 echo
-echo "Additional information can be found on the Wiki:
+echo "Additional information can be found on the Wiki:"
 echo "https://github.com/rocky4546/script.xmltv.tvheadend/wiki/Guide:-How-to-Setup-XMLTV-for-TVHeadEnd"
 
