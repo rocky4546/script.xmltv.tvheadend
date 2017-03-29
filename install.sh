@@ -178,7 +178,7 @@ read -p "What hour do you want the cronjob to run? (Recommend between 0 and 7) "
 # random generate the minute between 5 and 55
 minute=$(((RANDOM % 55)+5))
 pulltime=$(($hour+3))
-(crontab -l 2>/dev/null | grep -v $script_file; echo "$minute $hour * * * /home/$USER/xmltv/$script_file >/dev/null 2>&1") | crontab -
+(crontab -l 2>/dev/null | grep -v $script_file; echo "$minute $hour * * * /home/$USER/$script_file >/dev/null 2>&1") | crontab -
 echo "Cronjob added to crontab"
 
 echo
