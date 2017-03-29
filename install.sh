@@ -28,10 +28,25 @@ done
 if [[ ! -r "xmltv/$perl_file" ]] ; then
   if [[ ! -r "$perl_file" ]] ; then
     echo "$perl_file not found"
-    echo "Please download file from http://zap2xml.awardspace.info"
-    echo "and place into the folder containing install.sh"
-    echo
-    isAllFound=false
+    echo "Download file from http://zap2xml.awardspace.info"
+    echo "If you have downloaded the file, please"
+    isFound=false
+    while [ $isFound == "false" ] ; do
+      read -p "Enter the folder to $perl_file: " newpath
+      eval newloc=$newpath/$perl_file
+      if [[ -z $newpath ]] ; then
+        echo "Aborting install..."
+        exit
+      elif [[ -r "${newloc}" ]] ; then
+        echo "Found file, thank you at $newloc"
+        echo
+        cp $newloc `dirname $0`
+        isFound=true
+      else
+        echo "Hmmm, unable to find the file at $newloc"
+      fi
+    done
+
   elif [[ ! -d "xmltv" ]] ; then
     echo "ERROR: Unable to find xmltv folder in the release install folder"
     echo "It looks like this is not a released version from"
@@ -112,7 +127,7 @@ echo "Checking to see if TVHeadend knows about the grabber file"
 present=`sudo grep $grab_file ~hts/.hts/tvheadend/epggrab/config`
 if [[ -z "$present" ]] ; then
   echo "ERROR: TVHeadend has not recognized the new $grab_file"
-  echo "try rebooting and logging into the TVHeadend website"
+  echo "try logging into the TVHeadend website"
   echo "Once the $grab_file appears in the EPG Grabber Modules list"
   echo "Rerun this installation script"
   exit
@@ -183,6 +198,19 @@ echo "Cronjob added to crontab"
 
 echo
 echo "###### Installation Completed Successfully ######"
+echo 
+read -p "Do you want to quickly create a 2 day EPG? [Y|y] " answer
+if [[ -z $answer || "$answer" =~ [Y|y] ]] ; then
+  echo "Running script from ${dest_folder}/"
+  echo "Once the xmltv.xml file is generated, it can be imported into"
+  echo "TVHeadend. If it does not appear, check the log"
+  echo "at ~/kodi/temp/zap2xml.log or ${dest_folder}/"
+  echo 
+  /home/mccaslin/xmltv/zap2xml.sh fast -d 2
+  echo "zap2xml.sh script finished"
+else
+  echo "Generation of xmltv.xml skipped"
+fi
 
 echo
 echo "### MANUAL CHANGES TO MAKE IN TVHEADEND"
@@ -195,9 +223,12 @@ echo "Set the Cron multiline to include"
 echo "0 $pulltime \* \* \*"
 echo "This will pull in the updated xmltv.xml file at ${pulltime}am every day"
 echo "Save the changes"
+echo "If you have not generated the xmltv.xml file, the web console at the"
+echo "bottom of the web page will error"
+echo
+echo "Clicking on Re-run Internal EPG Grabbers will manual import"
+echo "the xmltv.xml file"
 echo
 echo "Additional information can be found on the Wiki:
 echo "https://github.com/rocky4546/script.xmltv.tvheadend/wiki/Guide:-How-to-Setup-XMLTV-for-TVHeadEnd"
-
-
 
