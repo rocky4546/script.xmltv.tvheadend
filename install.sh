@@ -34,11 +34,16 @@ if [[ ! -r "xmltv/$perl_file" ]] ; then
     isFound=false
     while [ $isFound == "false" ] ; do
       read -p "Enter the folder to $perl_file: " newpath
-      eval newloc=$runfrom/$newpath/$perl_file
       if [[ -z $newpath ]] ; then
         echo "Aborting install..."
         exit
-      elif [[ -r "${newloc}" ]] ; then
+      elif [[ $newpath = /* ]] ; then
+        # absolute path provided
+        eval newloc=$newpath/$perl_file
+      else
+        eval newloc=$runfrom/$newpath/$perl_file
+      fi
+      if [[ -r "${newloc}" ]] ; then
         echo "Found file, thank you at $newloc"
         echo
         cp $newloc .
@@ -47,7 +52,6 @@ if [[ ! -r "xmltv/$perl_file" ]] ; then
         echo "Hmmm, unable to find the file at $newloc"
       fi
     done
-
   elif [[ ! -d "xmltv" ]] ; then
     echo "ERROR: Unable to find xmltv folder in the release install folder"
     echo "It looks like this is not a released version from"
