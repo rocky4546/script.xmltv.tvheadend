@@ -169,15 +169,15 @@ if [[ "$isRedeploy" == "true" ]] ; then
   echo
   
   echo
-  echo "Testing zap2it login"
-  response=`curl -w   -o /dev/null -w "%{http_code}" -X POST -F "username=${zap2itEmail}" -F "password=$zap2itPassword" http://tvschedule.zap2it.com/tvlistings/ZCLogin.do 2>/dev/null`
-  if [[ "$response" != "000302" ]] ; then
-    echo "ERROR: Login failed, recieved message"
-    echo $response
-    exit
-  else
-    echo "Login Successful!"
-  fi
+  echo "Skipping zap2it login check"
+  #response=`curl -w   -o /dev/null -w "%{http_code}" -X POST -F "username=${zap2itEmail}" -F "password=$zap2itPassword" http://tvschedule.zap2it.com/tvlistings/ZCLogin.do 2>/dev/null`
+  #if [[ "$response" != "000302" ]] ; then
+  #  echo "ERROR: Login failed, recieved message"
+  #  echo $response
+  #  exit
+  #else
+  #  echo "Login Successful!"
+  #fi
 
   cp x$rc_file ~/$rc_file
   sed -i "s/<email>/$zap2itEmail/" ~/$rc_file
