@@ -23,10 +23,11 @@ use XML::DOM;
 # 224 Other/Unknown Grey
 # 240 Other/Unknown Grey
 
+
+
 #
 # The categories recognized by tvheadend (see epg.c) 
 #  
-
 my $MOVIE             =    "Movie / Drama";
 my $THRILLER          =    "Detective / Thriller";
 my $ADVENTURE         =    "Adventure / Western / War";
@@ -50,7 +51,7 @@ my $VARIETY           =    "Variety show";
 my $TALKSHOW          =    "Talk show";
 
 my $SPORT             =    "Sports";
-my $SPORT_SPECIAL     =    "Special events (Olympic Games; World Cup; etc.)";
+my $SPORT_SPECIAL     =    "Special events";
 my $SPORT_MAGAZINE    =    "Sports magazines";
 my $FOOTBALL          =    "Football / Soccer";
 my $TENNIS            =    "Tennis / Squash";
@@ -121,16 +122,24 @@ my %REPLACE=(
 #    "fr:Fin des programmes" => 0 ,
     "en:Action"                => $ADVENTURE ,
     "en:Adventure"             => $ADVENTURE ,
+    "en:Animals"               => $NATURE ,
     "en:Animated"              => $CARTOON ,
     "en:Artscrafts"            => $HOBBIES ,
+    "en:Auto"                  => $MOTORING ,
     "en:Baseball"              => $SPORT_TEAM ,
     "en:Basketball"            => $SPORT_TEAM ,
     "en:Busfinancial"          => $NEWS_MAGAZINE ,
     "en:Children"              => $KIDS ,
+    "en:Comedy"                => $COMEDY ,
+    "en:Computers"             => $TECHNOLOGY ,
+    "en:Consumer"              => $SHOPPING ,
+    "en:Cooking"               => $COOKING ,
     "en:Crime"                 => $THRILLER ,
     "en:Crimedrama"            => $THRILLER ,
     "en:Drama"                 => $MOVIE,
+    "en:Educational"           => $EDUCATIONAL,
     "en:Exercise"              => $FITNESS ,
+    "en:Fantasy"               => $SF ,
     "en:Fashion"               => $POPULAR_ART ,
     "en:Football"              => $FOOTBALL ,
     "en:Gameshow"              => $GAME ,
@@ -142,7 +151,8 @@ my %REPLACE=(
     "en:Homeimprovement"       => $SCIENCE ,
     "en:Horror"                => $SF ,
     "en:Housegarden"           => $GARDENING ,
-    "en:Howto"                 => $SCIENCE ,
+#    "en:Howto"                 => $SCIENCE ,
+    "en:Interview"             => $TALKSHOW ,
     "en:Medical"               => $MEDICINE ,
     "en:Motorsports"           => $SPORT_MOTOR ,
     "en:Movie"                 => $MOVIE ,
@@ -157,11 +167,12 @@ my %REPLACE=(
     "en:Publicaffairs"         => $DEBATE ,
     "en:Reality"               => $VARIETY ,
     "en:Religious"             => $RELIGION ,
-    "en:Science"               => $SCIENCE ,
+#    "en:Science"               => $SCIENCE ,
     "en:Sciencefiction"        => $SF ,
     "en:Selfimprovement"       => $INTERVIEW ,
-#    "en:Series"                => 0 ,
-#    "en:Shooting"              => 0 ,
+#    "en:Series"               => 0 ,
+#    "en:Shooting"             => 0 ,
+    "en:Shopping"              => $SHOPPING ,
     "en:Sitcom"                => $COMEDY ,
     "en:Soap"                  => $SOAP ,
     "en:Soccer"                => $FOOTBALL ,
@@ -171,8 +182,10 @@ my %REPLACE=(
     "en:Sportstalk"            => $SPORT_MAGAZINE ,
     "en:Suspense"              => $SF ,
     "en:Talk"                  => $TALKSHOW ,
+    "en:Technology"            => $TECHNOLOGY ,
     "en:Travel"                => $TRAVEL ,
     "en:Weather"               => $WEATHER ,
+    "en:Western"               => $ADVENTURE ,
  ) ; 
 
 
@@ -181,14 +194,17 @@ my $POST = '</category>'  ;
 
 sub myfilter {
   my ($lang,$name) = @_;
+  $name =~ s/\W//g;
   $lang="en"  if ( $lang eq "" ) ;   # Default language is "en" when is no lang attribute
   my $a = "$lang:$name" ; 
   if ( exists $REPLACE{$a} ) {     
+      
       return $REPLACE{$a} ;
   } elsif ( $lang eq "en" ) {    
+      print STDERR "Warning: Unmanaged category #1: '$a'\n" ;
       return $name ;   # For English, assume that missing entries are fine
   } else {
-      print STDERR "Warning: Unmanaged category: '$a'\n" ;
+      print STDERR "Warning: Unmanaged category #2: '$a'\n" ;
       return $name ;
   }
 }
