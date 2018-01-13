@@ -1,5 +1,5 @@
 start=0
-days=14
+days=12
 # num cache days from end
 ncdays=0
 # num cache days from start
