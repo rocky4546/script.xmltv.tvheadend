@@ -51,7 +51,7 @@ my $VARIETY           =    "Variety show";
 my $TALKSHOW          =    "Talk show";
 
 my $SPORT             =    "Sports";
-my $SPORT_SPECIAL     =    "Special events";
+my $SPORT_SPECIAL     =    "Special events (Olympic Games; World Cup; etc.)";
 my $SPORT_MAGAZINE    =    "Sports magazines";
 my $FOOTBALL          =    "Football / Soccer";
 my $TENNIS            =    "Tennis / Squash";
