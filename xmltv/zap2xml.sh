@@ -19,8 +19,7 @@ if [[ "$1" == "fast" ]] ; then
   echo "Executing with no delays"
   echo "This will put a load on zap2it.com"
   echo "Please be careful when using this command"
-  echo "Running with options $options"
-else
+  echo "Running with options $options"else
   options="-T -D -S 1"
   echo "Running with options $options"
 fi
@@ -37,10 +36,11 @@ if [[ ! -z "$file" ]] ; then
 else
   # perl script does not clean detail files properly, 
   # associated with using the -D option.
-  # this will remove cache detail files that are within x days of 
+  # below will remove cache non-detail files that are within x days of 
   # today, which will force the current days to be refreshed
-  # to current data.
-  daystoremove=1
+  # to current data.  It does not touch the detail cache files, so 
+  # this does not heavily impact the website.
+  daystoremove=3
   cachefolder=cache
   htmlfiles=`cd ${path}/${cachefolder}; ls *gz | egrep "^[0-9]+"`
   todaysec=`date +%s`
